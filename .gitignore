@@ -1,0 +1,11 @@
+__pycache__
+.vscode/
+.idea/
+build/
+build_ut/
+output/
+cmake-build-debug/
+dist/
+mskl.egg-info/
+
+.codemate
