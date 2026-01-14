@@ -36,26 +36,23 @@ coverage |  覆盖率统计，DT依赖 | pip install
 pytest | DT依赖 | pip install
 
 ## 工具安装
-介绍msKL工具的环境依赖及安装方式，具体请参见[msKL安装指南](./docs/zh/mskl_install_guide.md)。
+介绍msKL工具的环境依赖及安装方式，具体请参见[MindStudio Kernel Launcher安装指南](./docs/zh/mskl_install_guide.md)。
 
 # 快速入门
-以一个简单样例帮助用户快速上手msKL工具的Kernel级自动调优功能，具体内容请参见[msKL快速入门](https://www.hiascend.com/document/detail/zh/mindstudio/830/ODtools/Operatordevelopmenttools/atlasopdev_16_0155.html)。
-
-
-
+以一个简单样例帮助用户快速上手msKL工具的Kernel级自动调优功能，具体内容请参见[MindStudio Kernel Launcher快速入门](./docs/zh/mskl_quick_start.md)。
 
 # 功能介绍
--  [调用msOpGen算子工程](https://www.hiascend.com/document/detail/zh/mindstudio/830/ODtools/Operatordevelopmenttools/atlasopdev_16_0173.html)  
+-  [调用msOpGen算子工程](./docs/zh/mskl_user_guide.md/#调用msopgen算子工程功能介绍)  
 部分算子开源仓中，采用了msOpGen提供的工程模板。但基于此模板进行算子调用较为复杂，且难以实现算子的轻量化调测。为了解决此类问题，我们可以利用msKL工具提供tiling_func和get_kernel_from_binary接口，直接调用msOpGen工程中的tiling函数以及用户自定义的Kernel函数。
--  [自动调优 ](https://www.hiascend.com/document/detail/zh/mindstudio/830/ODtools/Operatordevelopmenttools/atlasopdev_16_0154.html)  
+-  [自动调优 ](./docs/zh/mskl_user_guide.md/#自动调优功能介绍)  
 在进行模板库算子开发时，利用msKL提供的接口在Python脚本中快速实现Kernel下发代码生成、编译及运行Kernel。  
 
 
 # API参考
-具体内容请参见[msKL接口参考](https://www.hiascend.com/document/detail/zh/mindstudio/830/ODtools/Operatordevelopmenttools/atlasopdev_16_0185.html)。
+具体内容请参见[MindStudio Kernel Launcher接口参考](./docs/zh/mskl_api_reference.md)。
 
 # FAQ
-msKL工具常见问题请参见[FAQ](https://www.hiascend.com/document/detail/zh/mindstudio/830/ODtools/Operatordevelopmenttools/atlasopdev_16_0166.html)。
+msKL工具常见问题请参见[FAQ](./docs/zh/faq.md)。
 
 # 免责声明
 ## 致msKL使用者
