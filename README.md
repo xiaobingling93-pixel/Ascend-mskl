@@ -39,7 +39,7 @@ pytest | DT依赖 | pip install
 介绍msKL工具的环境依赖及安装方式，具体请参见[MindStudio Kernel Launcher安装指南](./docs/zh/mskl_install_guide.md)。
 
 # 快速入门
-以一个简单样例帮助用户快速上手msKL工具的Kernel级自动调优功能，具体内容请参见[MindStudio Kernel Launcher快速入门](./docs/zh/mskl_quick_start.md)。
+详细操作步骤请参见[快速入门](./docs/zh/quick_start/mskl_quick_start.md)。
 
 # 功能介绍
 -  [调用msOpGen算子工程](./docs/zh/mskl_user_guide.md/#调用msopgen算子工程功能介绍)  
