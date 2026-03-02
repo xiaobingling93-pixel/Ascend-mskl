@@ -15,65 +15,98 @@
 # MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 # See the Mulan PSL v2 for more details.
 # -------------------------------------------------------------------------
-
-import os
-import sys
-import logging
-import subprocess
 import argparse
 import glob
+import logging
+import os
+import subprocess
+import sys
+import traceback
+from pathlib import Path
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def exec_cmd(cmd):
-    result = subprocess.run(cmd, capture_output=False, text=True, timeout=3600)
-    if result.returncode != 0:
-        logging.error("execute command %s failed, please check the log", " ".join(cmd))
-        sys.exit(result.returncode)
+class BuildManager:
+    """
+    统一构建管理：依赖拉取 → 编译出包 / 单元测试。
 
+    用法:
+        python build.py                  完整构建（拉取依赖 + 打包 whl）
+        python build.py local            本地构建（跳过依赖拉取, 打包 whl）
+        python build.py test             单元测试（拉取依赖 + 执行 pytest）
+        python build.py test local       单元测试（跳过依赖拉取, 执行 pytest）
+        python build.py -r <revision>    指定依赖的内部源码仓(例如msopcom)的 Git 分支/标签/commit
 
-def execute_python_test(test_cmd):
-    if test_cmd != "":
+    参数说明:
+        - 参数: command : 构建动作: 为空时为全构建, local 为跳过依赖下载, test 为运行单元测试。
+        - 参数: -r, --revision : 指定 Git 修订版本或标签用于依赖检出。
+    """
+
+    def __init__(self):
+        self.project_root = Path(__file__).resolve().parent
+        argument_parser = argparse.ArgumentParser(description='Build the project and optionally run tests.')
+        argument_parser.add_argument('command', nargs='*', default=[],
+                                     choices=[[], 'local', 'test'],
+                                     help='Build action: omit for full build, "local" to skip dependency download, "test" to run unit tests')
+        argument_parser.add_argument('-r', '--revision',
+                                     help='Specify Git revision for internal dependent repo (e.g., msopcom).')
+        self.parsed_arguments = argument_parser.parse_args()
+
+    def _execute_command(self, command_sequence, timeout_seconds=36000, cwd=None, env=None):
+        logging.info("Running: %s", " ".join(command_sequence))
+        subprocess.run(command_sequence, timeout=timeout_seconds, check=True, cwd=cwd, env=env)
+
+    def _run_unit_tests(self):
+        unit_test_build_dir = self.project_root / "build_ut"
+        unit_test_build_dir.mkdir(exist_ok=True)
+        os.chdir(unit_test_build_dir)
+
+        env = os.environ.copy()
+        env['PYTHONPATH'] = str(self.project_root) + os.pathsep + env.get('PYTHONPATH', '')
+        env['PYTHONPYCACHEPREFIX'] = str(unit_test_build_dir)
+
+        report_dir = unit_test_build_dir / "report"
+        test_cmd = [
+            "coverage3", "run", "--branch",
+            "--source=" + str(self.project_root),
+            "-m", "pytest",
+            str(self.project_root / "test" / "launcher"),
+            str(self.project_root / "test" / "op_tune"),
+            "--junitxml=" + str(report_dir / "final.xml"),
+            "-W", "ignore::DeprecationWarning",
+        ]
+
         logging.info("============ start to execute Python code UT test ============")
-        exec_cmd(test_cmd)
-        exec_cmd(["coverage3", "xml", "-o", "report/coverage.xml"])
-        exec_cmd(["coverage3", "html", "-d", "report"])
-        exec_cmd(["coverage3", "report", "-m"])
+        self._execute_command(test_cmd, env=env)
+        self._execute_command(["coverage3", "xml", "-o", str(report_dir / "coverage.xml")], env=env)
+        self._execute_command(["coverage3", "html", "-d", str(report_dir)], env=env)
+        self._execute_command(["coverage3", "report", "-m"], env=env)
 
+    def _run_product_build(self):
+        output_dir = self.project_root / "output"
+        output_dir.mkdir(mode=0o750, exist_ok=True)
 
-def create_arg_parser():
-    parser = argparse.ArgumentParser(description='Build script with optional testing')
-    parser.add_argument('command', nargs='*', default='[]', 
-                    choices=['[]', 'local', 'test'],
-                    help='Command to execute (python build.py [ |local|test]):\n')
-    parser.add_argument('-r', '--revision',
-                        help="Build with specific revision or tag")
-    return parser
+        self._execute_command([
+            sys.executable, "setup.py", "bdist_wheel",
+            "--dist-dir", str(output_dir),
+        ])
+
+        for whl in glob.glob(str(output_dir / "mskl*.whl")):
+            os.chmod(whl, 0o550)
+    
+    def run(self):
+        os.chdir(self.project_root)
+
+        if 'test' in self.parsed_arguments.command:
+            self._run_unit_tests()
+        else:
+            self._run_product_build()
+
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    parser = create_arg_parser()
-    args = parser.parse_args()
-    current_dir = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
-    os.chdir(current_dir)
-
-    if 'test' in args.command:
-         # 执行python代码UT测试
-        build_dir = os.path.join(current_dir, "build_ut")
-        pythontest_cmd = ["coverage3", "run", "--branch", "--source=" + current_dir, "-m", "pytest",
-                            current_dir + "/test/launcher/", current_dir + "/test/op_tune/",
-                            "--junitxml=" + build_dir +"/report/final.xml", "-W", "ignore::DeprecationWarning"] 
-       
-        if not os.path.exists(build_dir):
-            os.makedirs(build_dir, mode=0o755)
-        os.chdir(build_dir)
-        os.environ['PYTHONPATH'] = current_dir + os.pathsep + os.environ.get('PYTHONPATH', '')
-        os.environ['PYTHONPYCACHEPREFIX'] = build_dir
-        execute_python_test(pythontest_cmd)
-    else:
-        output_dir = os.path.join(current_dir, "output")
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir, mode=0o750)
-        python_executable = sys.executable    
-        exec_cmd([python_executable, "setup.py", "bdist_wheel", "--dist-dir", "output"])
-        for whl in glob.glob(os.path.join(output_dir, "mskl*.whl")):
-            os.chmod(whl, 0o550)
+    try:
+        BuildManager().run()
+    except Exception:
+        logging.error(f"Unexpected error: {traceback.format_exc()}")
+        sys.exit(1)
