@@ -2,7 +2,7 @@ import os
 from setuptools import setup
 os.makedirs("output", exist_ok=True)
 setup(
-    name = 'mskl',
+    name = 'mindstudio-kl',
     version = '1.0.0',
     author =' mskl',
     author_email = 'mskl',
