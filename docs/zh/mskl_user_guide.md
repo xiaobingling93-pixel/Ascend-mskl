@@ -4,17 +4,16 @@
 
 MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调用msOpGen算子工程和基于Ascend C模板库进行自动调优的功能，具体介绍如下：
 
--   [调用msOpGen算子工程功能介绍](#调用msopgen算子工程功能介绍)：msKL工具提供的tiling_func和get_kernel_from_binary接口，可以直接调用msOpGen算子工程。
--   [自动调优功能介绍](#自动调优功能介绍)：msKL提供模板库Kernel下发代码生成、编译、运行的能力，同时提供Kernel内代码替换并自动调优的能力。
+- [调用msOpGen算子工程功能介绍](#调用msopgen算子工程功能介绍)：msKL工具提供的tiling_func和get_kernel_from_binary接口，可以直接调用msOpGen算子工程。
+- [自动调优功能介绍](#自动调优功能介绍)：msKL提供模板库Kernel下发代码生成、编译、运行的能力，同时提供Kernel内代码替换并自动调优的能力。
 
 ## 使用前准备
-
 
 **环境准备**
 
 进行算子开发之前，需要安装驱动固件和CANN Toolkit软件包以及ops算子包，请参见《[CANN 软件安装指南](https://www.hiascend.com/document/detail/zh/canncommercial/83RC1/softwareinst/instg/instg_quick.html?Mode=PmIns&InstallType=local&OS=openEuler&Software=cannToolKit)》。本节不再给出安装示例。完成相关环境变量的配置后，可直接使用Kernel轻量化调用的功能。
 
-- 若要使用[自动调优](#自动调优功能介绍)功能，需要下载[Link](https://gitcode.com/cann/catlass)中的Ascend C模板库。
+- 若要使用[自动调优](#自动调优功能介绍)功能，需要下载[链接](https://gitcode.com/cann/catlass)中的Ascend C模板库。
 - 二次开发请保证输入数据可信安全。
 
 **约束**
@@ -62,13 +61,14 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
 
 **环境准备**<a id="环境准备"></a>
 
--   请参考[使用前准备](#使用前准备)，完成相关环境变量的配置。
--   单击[Link](https://gitee.com/ascend/samples/tree/master/operator/ascendc/0_introduction/12_matmulleakyrelu_frameworklaunch)获取样例工程，为进行算子检测做准备。
+- 请参考[使用前准备](#使用前准备)，完成相关环境变量的配置。
+- 单击[链接](https://gitee.com/ascend/samples/tree/master/operator/ascendc/0_introduction/12_matmulleakyrelu_frameworklaunch)获取样例工程，为进行算子检测做准备。
 
     > [!NOTE] 说明
     > 
     >- 本样例工程以Atlas A2 训练系列产品/Atlas A2 推理系列产品为例。
     >- 下载代码样例时，需执行以下命令指定分支版本。
+>
     >   ```shell
     >   git clone https://gitee.com/ascend/samples.git -b v1.9-8.3.RC1
     >   ```
@@ -181,13 +181,14 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
 
 > [!NOTE] 说明  
 > 在运行过程中出现任何异常，可通过设置环境变量的方式来查看debug日志以及保留中间文件，便于问题定位。
+>
 > ```shell
 > export MSKL_LOG_LEVEL=0
 > ```
 
 1. 完成算子Kernel开发后，Kernel函数的定义与实现将会呈现在basic_matmul.cpp文件中，如下所示。
 
-    ```
+    ```cpp
     // basic_matmul.cpp
     // ...
     template <class LayoutA, class LayoutB, class LayoutC>
@@ -298,6 +299,7 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
 
     > [!NOTE] 说明  
     > 除tunable标识的方法之外，还可以通过换行，在需要整行替换的代码行末尾使用**// tunable: 别名（L0Shape）**方式标记。其中，别名用于搜索空间索引。
+>
     >```
     > using L0TileShape =
     > MatmulShape<128, 256, 64>; // tunable: L0Shape
@@ -358,6 +360,7 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
 
 > [!NOTE] 说明  
 > 在运行过程中出现任何异常，可通过设置环境变量的方式来查看debug日志以及保留中间文件，便于问题定位。
+>
 > ```shell
 > export MSKL_LOG_LEVEL=0
 > ```
@@ -614,4 +617,3 @@ bisheng -O2 -std=c++17 -xcce --cce-aicore-arch=dav-c220 \
     $LAUNCH_SRC_FILE -o $OUTPUT_LIB_FILE
 exit $?
 ```
-

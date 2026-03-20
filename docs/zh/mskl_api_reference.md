@@ -61,7 +61,6 @@ msKL工具提供的接口可以调用msOpGen工程中的tiling函数以及用户
 
 ## tiling_func
 
-
 **功能说明**
 
 调用用户的tiling函数。
@@ -519,7 +518,7 @@ def basic_matmul(problem_shape, a, layout_a, b, layout_b, c, layout_c):
 
 **函数原型**
 
-```
+```py
 gen_file = mskl.Launcher(config).code_gen()
 ```
 
@@ -556,7 +555,7 @@ gen_file = mskl.Launcher(config).code_gen()
 
 **调用示例**
 
-```
+```py
 config = mskl.KernelInvokeConfig(kernel_file, kernel_name) 
 gen_file = mskl.Launcher(config).code_gen() 
 ```
@@ -589,7 +588,7 @@ class Launcher:
 
 **函数原型**
 
-```
+```py
 kernel = compile(build_script, gen_file)
 ```
 
@@ -657,7 +656,7 @@ kernel = compile(build_script, gen_file)
 
 **调用示例**
 
-```
+```py
 kernel = compile(build_script, gen_file)
 kernel[blockdim](arg1, arg2, ..., device_id=0)
 ```
@@ -793,7 +792,7 @@ def run_executable(m, n, k, device_id):
 
 **函数原型**
 
-```
+```py
 executable = compile_executable(build_script, src_file)
 ```
 
@@ -875,4 +874,3 @@ executable = compile_executable(build_script, src_file)
 executable = compile_executable(build_script, src_file)
 executable(a, b, c)
 ```
-
