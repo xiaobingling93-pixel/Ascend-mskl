@@ -59,7 +59,7 @@ class BuildManager:
 
     def _run_unit_tests(self):
         unit_test_build_dir = self.project_root / "build_ut"
-        unit_test_build_dir.mkdir(exist_ok=True)
+        unit_test_build_dir.mkdir(mode=0o750, exist_ok=True)
         os.chdir(unit_test_build_dir)
 
         env = os.environ.copy()
