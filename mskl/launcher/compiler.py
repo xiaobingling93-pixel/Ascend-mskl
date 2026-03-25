@@ -203,7 +203,7 @@ def compile(build_script: str,
     context.launch_src_file = abs_launch_src_path
 
     compile_cmd = ["bash", build_script, abs_launch_src_path, abs_output_bin_path]
-    result = subprocess.run(compile_cmd, capture_output=True, text=True)
+    result = subprocess.run(compile_cmd, capture_output=True, text=True, timeout=600)
     if result.returncode != 0:
         raise Exception("Compile failed.\nCommand info: " + ' '.join(compile_cmd) + "\n{}".format(result.stderr))
 
@@ -226,7 +226,7 @@ def compile_tiling(cpp_path: str, so_path: str):
             f'-I{cann_path}/include', f'-L{cann_path}/lib64', '-ltiling_api', '-ldl',
             '-lgraph_base', '-lgraph', '-lc_sec', '-lregister', '-lopp_registry', '-lascendalog', '-lplatform']
     args.extend(safe_compile_options)
-    res = subprocess.run(args, capture_output=True, text=True)
+    res = subprocess.run(args, capture_output=True, text=True, timeout=600)
     if res.returncode != 0:
         raise Exception(f'Compile {so_path} failed.\nArgs: {args}\nError info: {res.stderr}')
     os.chmod(so_path, safe_check.SAVE_DATA_FILE_AUTHORITY)
@@ -253,7 +253,7 @@ def compile_kernel_binary(src_file: str, so_path: str) -> CompiledKernel:
             f'-L{cann_path}/lib64', '-shared', '-o', so_path, '-ldl', '-lascendcl', '-lruntime',
             '-lascend_dump']
     args.extend(safe_compile_options)
-    res = subprocess.run(args, capture_output=True, text=True)
+    res = subprocess.run(args, capture_output=True, text=True, timeout=600)
     if res.returncode != 0:
         cmd = ' '.join(args)
         raise Exception(f'Compile {so_path} failed.\nCmd: {cmd}\nError info: {res.stderr}')

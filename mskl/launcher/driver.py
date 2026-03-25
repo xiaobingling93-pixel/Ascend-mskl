@@ -346,8 +346,9 @@ class NPUDeviceContext:
 
     def set_device(self, devid: int):
         self._do_acl_init()
-        if not isinstance(devid, int) or devid < 0:
-            raise Exception("Invalid devid, got".format(devid))
+        MAX_DEVICE_ID = 1024
+        if not isinstance(devid, int) or devid < 0 or devid >= MAX_DEVICE_ID:
+            raise Exception("Invalid devid, got {}".format(devid))
         ret = self._acl.rt.set_device(devid)
         if ret != 0:
             raise RuntimeError(f'Set device failed, error code: {ret}')
@@ -355,7 +356,8 @@ class NPUDeviceContext:
 
     def reset_device_force(self, devid: int):
         self._do_acl_init()
-        if not isinstance(devid, int) or devid < 0:
+        MAX_DEVICE_ID = 1024
+        if not isinstance(devid, int) or devid < 0 or devid >= MAX_DEVICE_ID:
             raise Exception("Invalid devid, got {}".format(devid))
         return self._acl.rt.reset_device_force(self._active_device)
 
