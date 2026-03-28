@@ -173,7 +173,7 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
 自动调优流程包括Kernel级自动调优和应用级自动调优两种，具体流程请参见[图1](#fig985071581517)，具体操作请参见[Kernel级自动调优样例](#section778122211315)和[应用级自动调优样例](#section14971258122)。
 
 **图 1**  自动调优流程示意图<a id="fig985071581517"></a>  
-![](figures/自动调优流程示意图.png "自动调优流程示意图")
+![](../figures/自动调优流程示意图.png "自动调优流程示意图")
 
 **Kernel级自动调优样例<a id="section778122211315"></a>**
 

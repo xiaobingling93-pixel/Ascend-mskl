@@ -9,7 +9,7 @@ setup(
     description = 'mskl',
     long_description = open('README.md', encoding='utf-8').read(),
     long_description_content_type = 'text/markdown',
-    url = 'https://gitee.com/Ascend/MindStudio-KL',
+    url = 'https://gitcode.com/Ascend/mskl',
     packages = ['mskl'],
     include_package_data = True,
     classifiers = [

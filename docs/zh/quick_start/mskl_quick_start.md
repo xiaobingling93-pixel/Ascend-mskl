@@ -13,7 +13,7 @@
 
 ### 1.2 环境准备
 
-请严格按照<a href="https://gitcode.com/Ascend/msot/blob/master/docs/zh/quick_start/installation_guide.md" target="_blank">《昇腾 AI 算子开发工具链学习环境安装指南》</a>完成环境安装与工作区配置。
+请严格按照<a href="https://gitcode.com/Ascend/msot/blob/master/docs/zh/common/dev_env_setup.md" target="_blank">《算子工具开发环境安装指导》</a>完成环境安装与工作区配置。
 即使您已具备类似环境，也需按该指南重新执行一遍，以确保所有依赖组件、环境变量等完整且一致。
 
 ## 2. 操作步骤
@@ -111,16 +111,16 @@ if __name__ == "__main__":
 
 #### 2.3.2 对脚本进行适配
 
-执行如下命令，将查询到的 .o 文件绝对路径填入 `KERNEL_BINARY_PATH` 变量中：
+执行如下命令，将查询到的 .o 文件绝对路径填入`mskl_demo.py`的 `KERNEL_BINARY_PATH` 变量中：
 
 ```shell
 find $ASCEND_HOME_PATH -name *AddCustom*o
 ```
 
-执行以下命令，将查询到的 .so 文件绝对路径填入 `TILING_LIB_PATH` 变量中：
+执行以下命令，将查询到的 .so 文件绝对路径填入`mskl_demo.py`的 `TILING_LIB_PATH` 变量中：
 
 ```shell
-find $ASCEND_HOME_PATH -name liboptiling.so
+find $ASCEND_HOME_PATH -path */customize/* -name liboptiling.so
 ```
 
 #### 2.3.3 执行脚本，调用算子
