@@ -18,7 +18,11 @@ python build.py
 python build.py test
 ```
 
-输出类似如下跑的用例数和通过用例数相同即表示成功：
+如果输出类似如下，且跑的用例数和通过用例数相同，即表示成功：
+
+```text
+[----------] 59 tests from CoreApi (8ms total) 
+```
 
 ```text
 ========== 59 passed in 2.05s ==========
