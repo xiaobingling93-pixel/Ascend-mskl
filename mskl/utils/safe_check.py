@@ -34,13 +34,13 @@ def check_input_file(path, threshold=MAX_FILE_SIZE):
         raise OSError(f'{path} is not a valid file path.')
     path = os.path.abspath(path)
     if os.path.islink(path):
-        raise OSError(f"Path {path} shouldn't be a soft link.")
+        logger.warning(f"Path {path} is insecure because is a soft link.")
     if not os.access(path, os.R_OK):
         raise PermissionError(f'Path {path} is not readable.')
     if os.path.getsize(path) >= threshold:
         raise ValueError(f'The file {path} is too large.')
     if not check_path_owner_consistent(path):
-        raise PermissionError(f'The file {path} is insecure because it does not belong to you.')
+        logger.warning(f'The file {path} is not owned by the current user, which may cause security problems.')
     check_group_others_w_permission(path)
 
 
@@ -53,9 +53,9 @@ def check_path_owner_consistent(path):
 def check_group_others_w_permission(path):
     mode = os.stat(path).st_mode
     if mode & stat.S_IWGRP:
-        raise PermissionError(f'Path {path} cannot have write permission of group.')
+        logger.warning(f'Path {path} is insecure because users in the same groups or in the other groups have write permission.')
     if mode & stat.S_IWOTH:
-        raise PermissionError(f'Path {path} cannot have write permission of other users.')
+        logger.warning(f'Path {path} is insecure because users in the same groups or in the other groups have write permission.')
 
 
 def check_variable_type(var, expected_type):
@@ -84,9 +84,8 @@ class FileChecker:
             logger.error(f"Path:{self.absolute_path} length is too long.")
             return False
         if self.is_soft_link_recusively():
-            logger.error(f"Path:{self.absolute_path} contains soft link which may cause security problems,"
+            logger.warning(f"Path:{self.absolute_path} contains soft link which may cause security problems,"
                          f" please check.")
-            return False
         if self.file_type != "dir" and os.path.isdir(self.absolute_path):
             logger.error(f"Path:{self.absolute_path} is dir, not a file.")
             return False
@@ -168,17 +167,14 @@ class FileChecker:
             return False
         # 检查组权限是否允许写操作
         if (group_permission & os.W_OK) != 0:
-            logger.error(f"Path:{self.absolute_path} is writable by the group.")
-            return False
+            logger.warning(f"Path:{self.absolute_path} is insecure because users in the same groups or in the other groups have write permission.")
         # 检查其他用户是否有写权限
         if (other_permission & os.W_OK) != 0:
-            logger.error(f"Path:{self.absolute_path} is writable by any other users.")
-            return False
+            logger.warning(f"Path:{self.absolute_path} is insecure because users in the same groups or in the other groups have write permission.")
 
         # 检查文件所有者是否与当前用户一致
         if uid != 0 and uid != file_stat.st_uid and file_stat.st_uid != 0:
-            logger.error(f"Path:{self.absolute_path} the current owner have inconsistent permission.")
-            return False
+            logger.warning(f"Path:{self.absolute_path} is not owned by the current user, which may cause security problems.")
         return True
 
     def check_file_size_valid(self):
@@ -189,9 +185,7 @@ class FileChecker:
     def check_group_others_w_permission(self):
         mode = os.stat(self.absolute_path).st_mode
         if mode & stat.S_IWGRP:
-            logger.error(f"Path:{self.absolute_path} cannot have write permission of group.")
-            return False
+            logger.warning(f"Path:{self.absolute_path} is insecure because users in the same groups or in the other groups have write permission.")
         if mode & stat.S_IWOTH:
-            logger.error(f"Path:{self.absolute_path} cannot have write permission of other users.")
-            return False
+            logger.warning(f"Path:{self.absolute_path} is insecure because users in the same groups or in the other groups have write permission.")
         return True
