@@ -11,7 +11,7 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
 
 **环境准备**
 
-进行算子开发之前，需要安装驱动固件和CANN Toolkit软件包以及ops算子包，请参见《[CANN 软件安装指南](https://www.hiascend.com/document/detail/zh/canncommercial/83RC1/softwareinst/instg/instg_quick.html?Mode=PmIns&InstallType=local&OS=openEuler&Software=cannToolKit)》。本节不再给出安装示例。完成相关环境变量的配置后，可直接使用Kernel轻量化调用的功能。
+进行算子开发之前，需要安装驱动固件和CANN Toolkit软件包以及ops算子包，请参见《[CANN 软件安装指南](https://www.hiascend.com/cann/download)》。本节不再给出安装示例。完成相关环境变量的配置后，可直接使用Kernel轻量化调用的功能。
 
 - 若要使用[自动调优](#自动调优功能介绍)功能，需要下载[链接](https://gitcode.com/cann/catlass)中的Ascend C模板库。
 - 二次开发请保证输入数据可信安全。
@@ -40,7 +40,7 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
 - 若CANN中曾经部署过相同类型的算子（op_type），用户修改了tiling函数并重新编译，则需要在CANN环境中重新部署该算子。
 - 调用tiling_func和get_kernel_from_binary接口时，系统会在当前目录下的mindstudio_mskl_gen文件夹中生成以下中间文件，该文件仅供开发定位使用，用户无需关注。请勿修改该文件夹及其子文件的内容，以免造成工具功能异常。
 
-    ```tex
+    ```shell
     (p39) root@ubuntu:~/project/add_custom/CustomOp$ ll mindstudio_mskl_gen/
     total 388
     drwxr-x---  2 root root    314 Jul 24 09:40 ./
