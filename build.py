@@ -51,6 +51,10 @@ class BuildManager:
                                      help='Build action: omit for full build, "local" to skip dependency download, "test" to run unit tests')
         argument_parser.add_argument('-r', '--revision',
                                      help='Specify Git revision for internal dependent repo (e.g., msopcom).')
+        argument_parser.add_argument('--build-version', type=str, default=None,
+                                     help='Build version for run/exe/dmg packages')
+        argument_parser.add_argument('--whl-version', type=str, default=None,
+                                     help='WHL version for Python wheel packages')
         self.parsed_arguments = argument_parser.parse_args()
 
     def _execute_command(self, command_sequence, timeout_seconds=36000, cwd=None, env=None):
@@ -97,6 +101,12 @@ class BuildManager:
     
     def run(self):
         os.chdir(self.project_root)
+
+        # 将 --whl-version 传入环境变量，供 setup.py 通过 os.environ.get('WHL_VERSION') 读取
+        whl_version = self.parsed_arguments.whl_version
+        if whl_version:
+            os.environ['WHL_VERSION'] = whl_version
+            logging.info("WHL_VERSION set to: %s", whl_version)
 
         if 'test' in self.parsed_arguments.command:
             self._run_unit_tests()

@@ -3,7 +3,7 @@ from setuptools import setup
 os.makedirs("output", exist_ok=True)
 setup(
     name = 'mindstudio-kl',
-    version = '26.0.0',
+    version = os.environ.get('WHL_VERSION', '26.0.0'),
     author =' mskl',
     author_email = 'mskl',
     description = 'mskl',
