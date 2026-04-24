@@ -2,6 +2,11 @@
 
 <br>
 
+msKL工具的安装方式包括：
+
+- 二进制安装：msKL工具完整功能已集成在CANN包中发布，可直接安装CANN包，具体请参见[二进制安装](#1-二进制安装)。
+- 源码安装：如需使用最新代码的功能，或对源码进行修改以增强功能，可下载本仓库代码，自行编译、打包工具并完成安装，具体请参见[源码安装](#2-源码安装)。
+
 ## 1. 二进制安装
 
 MindStudio工具链是集成到CANN包中发布的，可通过以下方式完成安装：
@@ -30,14 +35,14 @@ python3 build.py
 
 构建输出：./output/mindstudio_kl-xxxxx.whl
 
-## 2.3 安装whl包
+### 2.3 安装whl包
 
 ```sh
 cd output
 pip3 install mindstudio_kl-xxxxx.whl
 ```
 
-## 3.升级
+### 2.4 升级
 
 如需使用whl包替换运行环境原有已安装的whl包，执行如下安装操作：
 
@@ -48,7 +53,7 @@ pip3 install mindstudio_kl-xxxxx.whl --force-reinstall
 安装过程中，若提示是否替换原有安装包：
 输入"y"，则安装包会自动完成升级操作。
 
-## 4.卸载
+### 2.5 卸载
 
 卸载则通过如下命令卸载：
 

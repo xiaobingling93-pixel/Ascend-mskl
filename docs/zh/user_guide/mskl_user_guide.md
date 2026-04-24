@@ -64,7 +64,7 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
 - 请参考[使用前准备](#使用前准备)，完成相关环境变量的配置。
 - 单击[链接](https://gitee.com/ascend/samples/tree/master/operator/ascendc/0_introduction/12_matmulleakyrelu_frameworklaunch)获取样例工程，为进行算子检测做准备。
 
-    > [!NOTE] 说明
+    > [!NOTE] 
     > 
     >- 本样例工程以Atlas A2 训练系列产品/Atlas A2 推理系列产品为例。
     >- 下载代码样例时，需执行以下命令指定分支版本。
@@ -179,7 +179,7 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
 
 本章节以模板库catlass-v1-dev分支的[examples/00_basic_matmul](https://gitee.com/ascend/catlass/blob/catlass-v1-dev/examples/00_basic_matmul/basic_matmul.cpp)为例，介绍如何利用msKL工具提供的接口实现Kernel级自动调优。
 
-> [!NOTE] 说明  
+> [!NOTE]   
 > 在运行过程中出现任何异常，可通过设置环境变量的方式来查看debug日志以及保留中间文件，便于问题定位。
 >
 > ```shell
@@ -297,17 +297,17 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
     using L0TileShape = GemmShape<128, 256, 64>; // tunable
     ```
 
-    > [!NOTE] 说明  
+    > [!NOTE]   
     > 除tunable标识的方法之外，还可以通过换行，在需要整行替换的代码行末尾使用**// tunable: 别名（L0Shape）**方式标记。其中，别名用于搜索空间索引。
->
-    >```
+    >
+    > ```CPP
     > using L0TileShape =
     > MatmulShape<128, 256, 64>; // tunable: L0Shape
-    >```
+    > ```
 
 6. 通过autotune接口的configs入参定义参数搜索空间，每一类参数组合会替换算子Kernel代码中被标记的代码行，然后进行编译、运行并完成Kernel性能采集。搜索空间定义示例可参考如下所示。
 
-    > [!NOTE] 说明
+    > [!NOTE] 
     >- 参数替换需合理，不能造成编译或运行错误。
     >- 参数替换原则如下（以configs中的第一行为例）：
     >    1. 先替换// tunable: L0Shape方式标记的参数，将标记代码行（MatmulShape<128, 256, 64>）整行替换为configs中的value字符串（MatmulShape<128, 256, 64>）。
@@ -315,7 +315,7 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
     >        - 不同作用域中，可能会有两个同名的变量被声明。若两个变量均符合匹配规则时，仅第一个变量会被修改。
     >        - 若其中一个config未匹配成功，该config对应的任务会停止并报错。但其他匹配成功的config将会成功进行参数替换。
 
-    ```
+    ```python
     @mskl.autotune(configs=[ # add and try your own config here for a better kernel performance
         {'L1TileShape': 'GemmShape<128, 256, 256>', 'L0TileShape': 'GemmShape<128, 256, 64>'}, #0 the same config as in basic_matmul.cpp
         {'L1TileShape': 'GemmShape<128, 256, 128>', 'L0TileShape': 'GemmShape<128, 256, 64>'},
@@ -358,7 +358,7 @@ MindStudio Kernel Performance Prediction（算子调用工具，msKL）具有调
 
 本章节以模板库master分支的[examples/00_basic_matmul](https://gitee.com/ascend/catlass/blob/master/examples/00_basic_matmul/basic_matmul.cpp)为例，介绍如何利用msKL工具提供的接口实现对应用级的自动调优。
 
-> [!NOTE] 说明  
+> [!NOTE]   
 > 在运行过程中出现任何异常，可通过设置环境变量的方式来查看debug日志以及保留中间文件，便于问题定位。
 >
 > ```shell

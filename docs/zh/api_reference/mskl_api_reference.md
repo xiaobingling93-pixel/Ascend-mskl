@@ -65,7 +65,7 @@ msKL工具提供的接口可以调用msOpGen工程中的tiling函数以及用户
 
 调用用户的tiling函数。
 
-> [!NOTE] 说明  
+> [!NOTE]   
 > tiling_func不支持调用《[基础数据结构和接口参考](https://www.hiascend.com/document/detail/zh/canncommercial/83RC1/API/basicdataapi/atlasopapi_07_00001.html)》中的GetCompileInfo接口。
 
 **函数原型**
@@ -398,7 +398,7 @@ def get_kernel_from_binary(kernel_binary_file: str, kernel_type: str = None, til
 </tbody>
 </table>
 
-> [!NOTE] 说明  
+> [!NOTE]   
 > Kernel对象类型为CompiledKernel，支持如下方式调用Kernel：kernel[blockdim](arg1, arg2, ..., timeout=-1, device_id=0, repeat=1)，实际调用时，需保证CompiledKernel函数的入参和调用Kernel时的入参一致。
 
 **调用示例**

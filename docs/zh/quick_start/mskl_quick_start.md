@@ -9,7 +9,7 @@
 
 ### 1.1 建议
 
-本章节以您已完成《[昇腾算子开发工具链快速入门](https://gitcode.com/Ascend/msot/blob/master/docs/zh/quick_start/op_tool_quick_start.md)》的全流程操作为前提；若尚未体验，建议先完成该指南以获得更佳的学习效果。
+本章节以您已完成《[算子开发工具快速入门](https://gitcode.com/Ascend/msot/blob/master/docs/zh/quick_start/op_tool_quick_start.md)》的全流程操作为前提；若尚未体验，建议先完成该指南以获得更佳的学习效果。
 
 ### 1.2 环境准备
 
@@ -37,17 +37,17 @@ python3 -c "import numpy, sympy, scipy, attrs, psutil, decorator; from packaging
 
 ### 2.3 【轻量调用】Python 脚本中 Kernel 轻量化调用（msKL）
 
->[!NOTE]说明   
->**知识点：msKPP 接口调用机制简介**   
+> [!NOTE]   
+> **知识点：msKPP 接口调用机制简介**   
 >
->1. `mskpp.tiling_func` 接口   
+> 1. `mskpp.tiling_func` 接口   
 >通过此接口，开发者可指定 Tiling 动态库（.so 文件）与算子类型（op_type），精准调用目标 Tiling 函数；同时，通过传入 inputs_shape、attr 等参数，可灵活构造 TilingContext，实现无需依赖 ACLNN 框架的轻量化 Tiling 调用。   
->Tiling 函数的执行结果包含 blockdim（核函数启动数量）、workspace（工作空间内存）以及序列化的 tiling_data 结构体数据，既可用于 Tiling 逻辑验证，也可作为后续 Kernel 调用的必要输入。      
->2. `mskpp.get_kernel_from_binary` 接口   
+> Tiling 函数的执行结果包含 blockdim（核函数启动数量）、workspace（工作空间内存）以及序列化的 tiling_data 结构体数据，既可用于 Tiling 逻辑验证，也可作为后续 Kernel 调用的必要输入。      
+> 2. `mskpp.get_kernel_from_binary` 接口   
 >通过此接口，开发者可指定算子的 Kernel 二进制文件（.o 文件）及其函数签名参数，实现 Kernel 的快速加载与调用。
->Kernel 所需的输入/输出张量可直接传入 numpy.array，执行完成后，可立即读取输出张量内容，用于精度比对或功能验证。   
->3. 与其他算子工具链无缝集成   
->开发者仅需通过工具命令直接启动 mskpp Python 脚本即可，例如：`msprof op python3 mskl_demo.py`
+> Kernel 所需的输入/输出张量可直接传入 numpy.array，执行完成后，可立即读取输出张量内容，用于精度比对或功能验证。   
+> 3. 与其他算子工具链无缝集成   
+> 开发者仅需通过工具命令直接启动 mskpp Python 脚本即可，例如：`msprof op python3 mskl_demo.py`
 
 #### 2.3.1 开发 Python 调用脚本
 
@@ -125,9 +125,9 @@ find $ASCEND_HOME_PATH -path */customize/* -name liboptiling.so
 ```
 
 #### 2.3.3 执行脚本，调用算子
->
->[!CAUTION] 注意   
->请在成功部署算子到 CANN 后再调用，否则会报错。
+
+> [!CAUTION]    
+> 请在成功部署算子到 CANN 后再调用，否则会报错。
 
 ```shell
 python3 mskl_demo.py
